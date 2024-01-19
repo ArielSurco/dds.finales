@@ -33,7 +33,7 @@ a medida que pueda
 
 # Modelo de Dominio
 ### Diagrama de clases
-![Diagrama de clases](img_1.png)
+![Diagrama de clases](img_3.png)
 
 ### Justificaciones
 
