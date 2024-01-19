@@ -1,6 +1,10 @@
 @startuml
 'https://plantuml.com/class-diagram
 
+entity Estudiante {
+    <<PK>> legajo
+    --
 
+}
 
 @enduml

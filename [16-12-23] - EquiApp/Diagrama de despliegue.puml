@@ -1,0 +1,24 @@
+@startuml
+'https://plantuml.com/deployment-diagram
+
+node "Database Server" {
+    database MySQL
+}
+node "EquiApp Server" {
+    component Modelo
+    component Vista
+    component Controlador
+}
+component AlgoritmoCoincidencias
+component SGA
+component SGE
+
+Vista -- Controlador
+Modelo -- Controlador
+Modelo -(0- MySQL
+Controlador --(0- SGE : HTTP
+Controlador --(0- SGA : HTTP
+Controlador --(0- AlgoritmoCoincidencias : HTTP
+AlgoritmoCoincidencias -(0- Controlador : HTTP
+
+@enduml

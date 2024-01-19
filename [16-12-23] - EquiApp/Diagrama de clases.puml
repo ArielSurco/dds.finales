@@ -1,0 +1,125 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class Estudiante {
+    String legajo
+    String idSGA
+    String nombre
+    String apellido
+    LocalDate fechaNacimiento
+    String direccion
+    String barrio
+    String fechaIngreso
+    DatosDesempenio desempenio
+    List<CuestionarioRespondido> cuestionariosRespondidos
+}
+
+Estudiante -> DatosDesempenio
+
+class DatosDesempenio {
+    Integer cantMateriasRecursadas
+    Integer cantMateriasFirmadas
+    Integer cantMateriasAprobadas
+    Integer cantMateriasPromocionadas
+    Float promedioGeneral
+}
+
+class CalculadorDesempenio {
+    calcularDesempenio(String legajo): DatosDesempenio
+}
+
+interface AdapterHistorialAcademico
+
+CalculadorDesempenio .> AdapterHistorialAcademico
+CalculadorDesempenio ..> DatosDesempenio
+
+class CuestionarioRespondido {
+    Cuestionario cuestionario
+    List<Respuesta> respuestas
+}
+
+class Respuesta {
+    Pregunta pregunta
+    String respuestaLibre
+    List<Opcion> opcionElegida
+}
+
+Estudiante --> CuestionarioRespondido
+CuestionarioRespondido -> Cuestionario
+CuestionarioRespondido --> Respuesta
+Respuesta -> Pregunta
+Respuesta --> Opcion
+
+class Cuestionario {
+    String nombre
+    String descripcion
+    List<Pregunta> preguntas
+}
+
+enum TipoPregunta {
+    MULTIPLE
+    UNICA
+    LIBRE
+}
+
+class Pregunta {
+    String enunciado
+    TipoPregunta tipo
+    List<Opcion> opciones
+}
+
+class Opcion {
+    String detalle
+}
+
+Cuestionario -> Pregunta
+Pregunta -> Opcion
+Pregunta --> TipoPregunta
+
+class BusquedaEquipo {
+    Estudiante creador
+    PlanDeCarrera plan
+    Asignatura asignatura
+    Integer cantMinimaIntegrantes
+    Integer cantMaximaIntegrantes
+    String descripcion
+    EstadoBusqueda estado
+}
+
+enum EstadoBusqueda {
+    INICIADA
+    SUGERIDA
+    ACEPTADA
+}
+
+class PlanDeCarrera {
+    String codigo
+    String descripcion
+    Integer anio
+}
+
+class Asignatura {
+    String codigo
+    String nombre
+}
+
+BusquedaEquipo -> PlanDeCarrera
+BusquedaEquipo --> Asignatura
+BusquedaEquipo ---> Estudiante
+BusquedaEquipo --> EstadoBusqueda
+
+class ResultadoBusqueda {
+    BusquedaEquipo busqueda
+    List<SolicitudIntegrante> solicitudes
+}
+
+class SolicitudIntegrante {
+    Estudiante estudiante
+    boolean aceptada
+}
+
+SolicitudIntegrante --> Estudiante
+ResultadoBusqueda --> SolicitudIntegrante
+ResultadoBusqueda -> BusquedaEquipo
+
+@enduml
