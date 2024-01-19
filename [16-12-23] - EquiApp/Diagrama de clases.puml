@@ -9,9 +9,8 @@ class Estudiante {
     LocalDate fechaNacimiento
     String direccion
     String barrio
-    String fechaIngreso
+    LocalDate fechaIngreso
     DatosDesempenio desempenio
-    List<CuestionarioRespondido> cuestionariosRespondidos
 }
 
 Estudiante -> DatosDesempenio
@@ -34,6 +33,7 @@ CalculadorDesempenio .> AdapterHistorialAcademico
 CalculadorDesempenio ..> DatosDesempenio
 
 class CuestionarioRespondido {
+    Estudiante encuestado
     Cuestionario cuestionario
     List<Respuesta> respuestas
 }
@@ -108,18 +108,13 @@ BusquedaEquipo --> Asignatura
 BusquedaEquipo ---> Estudiante
 BusquedaEquipo --> EstadoBusqueda
 
-class ResultadoBusqueda {
-    BusquedaEquipo busqueda
-    List<SolicitudIntegrante> solicitudes
-}
-
 class SolicitudIntegrante {
+    BusquedaEquipo busqueda
     Estudiante estudiante
     boolean aceptada
 }
 
 SolicitudIntegrante --> Estudiante
-ResultadoBusqueda --> SolicitudIntegrante
-ResultadoBusqueda -> BusquedaEquipo
+SolicitudIntegrante -> BusquedaEquipo
 
 @enduml

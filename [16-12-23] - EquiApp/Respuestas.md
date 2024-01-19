@@ -44,3 +44,14 @@ de forma que si es LIBRE, la respuesta se guarda en el atributo respuestaLibre y
 - El CalculadorDeDesempenio obtiene el HistorialAcademico por medio del AdapterHistorialAcademico
 que internamente realizaría la llamada al endpoint correspondiente del SGA
 
+
+# Persistencia
+### Modelo de datos
+![Modelo de datos](img_2.png)
+
+### Justificaciones
+
+- Se embebe la clase DatosDesempenio debido a que se forma una relación 1 a 1 donde seguramente no necesite obtener solo los datos sin el alumno
+- Sí se persisten el plan de carrera y la asignatura porque se debe poder enviar listas de éstas,
+para que el estudiante pueda elegir entre opciones existentes
+- Los enums EstadoBusqueda y TipoPregunta se almacenarán como strings en las clases que las contienen, con la anotación @Enumerated

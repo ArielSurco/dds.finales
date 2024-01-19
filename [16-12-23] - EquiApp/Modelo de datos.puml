@@ -2,9 +2,112 @@
 'https://plantuml.com/class-diagram
 
 entity Estudiante {
-    <<PK>> legajo
+    <<PK>> legajo VARCHAR
     --
-
+    idSGA VARCHAR
+    nombre VARCHAR
+    apellido VARCHAR
+    fechaNacimiento Date
+    direccion VARCHAR
+    barrio VARCHAR
+    fechaIngreso DATE
+    cantMateriasRecursadas INTEGER
+    cantMateriasFirmadas INTEGER
+    cantMateriasAprobadas INTEGER
+    cantMateriasPromocionadas INTEGER
+    promedioGeneral DECIMAL(2,2)
 }
+
+class Cuestionario {
+    <<PK>> id INTEGER
+    ---
+    nombre VARCHAR
+    descripcion VARCHAR
+}
+
+class Cuestionario_Pregunta {
+    <<PK, FK>> cuestionario_id INTEGER
+    <<PK, FK>> pregunta_id INTEGER
+}
+
+class Pregunta {
+    <<PK>> id INTEGER
+    ---
+    enunciado VARCHAR
+    tipoPregunta VARCHAR
+}
+
+class Opcion {
+    <<PK>> id INTEGER
+    ---
+    <<FK>> pregunta_id INTEGER
+    detalle VARCHAR
+}
+
+class BusquedaEquipo {
+    <<PK>> id INTEGER
+    ---
+    <<FK>> creador_id INTEGER
+    <<FK>> plan_codigo VARCHAR
+    <<FK>> asignatura_codigo VARCHAR
+    cantMinimaIntegrantes INTEGER
+    cantMaximaIntegrantes INTEGER
+    descripcion VARCHAR
+    estado VARCHAR
+}
+
+class PlanDeCarrera {
+    <<PK>> codigo VARCHAR
+    ---
+    descripcion VARCHAR
+    anio INTEGER
+}
+
+class Asignatura {
+    <<PK>> codigo VARCHAR
+    ---
+    nombre VARCHAR
+}
+
+class SolicitudIntegrante {
+    <<PK>> id INTEGER
+    ---
+    <<FK>> busqueda_id INTEGER
+    <<FK>> estudiante_id INTEGER
+    aceptada BOOLEAN
+}
+
+class CuestionarioRespondido {
+    <<PK>> id INTEGER
+    ---
+    <<FK>> cuestionario_id INTEGER
+}
+
+class Respuesta {
+    <<PK>> id INTEGER
+    ---
+    <<FK>> cuestionarioRespondido_id INTEGER
+    <<FK>> pregunta_id INTEGER
+    respuestaLibre VARCHAR
+}
+
+class Opcion_Respuesta {
+    <<PK, FK>> respuesta_id
+    <<PK, FK>> opcion_id
+}
+
+Estudiante ||-o{ CuestionarioRespondido
+CuestionarioRespondido ||-|{ Respuesta
+Respuesta }o-|| Pregunta
+Respuesta |o-o{ Opcion_Respuesta
+Opcion_Respuesta }o-|| Opcion
+Pregunta ||--o{ Opcion
+Cuestionario ||-|{ Cuestionario_Pregunta
+Cuestionario_Pregunta }o--|| Pregunta
+BusquedaEquipo }o-|| Estudiante
+BusquedaEquipo }o--|| PlanDeCarrera
+BusquedaEquipo }o--|| Asignatura
+SolicitudIntegrante }o--|| BusquedaEquipo
+SolicitudIntegrante }o--|| Estudiante
 
 @enduml
