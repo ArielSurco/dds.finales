@@ -1,0 +1,57 @@
+@startuml
+'https://plantuml.com/object-diagram
+
+object Empresa {
+    nombre = "Amazon"
+}
+
+object Habilidad1 {
+    nombre = "Algoritmos"
+}
+
+object Habilidad2 {
+    nombre = "Estructuras de datos"
+}
+
+object RespuestaCorrecta {
+    detalle = "..."
+}
+
+object Pregunta {
+    consigna = "Implemente el algoritmo de ordenamiento ..."
+    habilidades = [Habilidad1, Habilidad2]
+    respuestasCorrectas = [RespuestaCorrecta]
+    tipo = "CODIGO"
+}
+
+object Metrica {
+    nombre = "Tiempo en otra pestaña"
+}
+
+object Indice {
+    nombre = "Copia"
+    metricasNecesarias = [Metrica]
+}
+
+object Evaluacion {
+    nombre = "Algoritmos de ordenamiento"
+    preguntas = [Pregunta]
+    indices = [Indice]
+}
+
+object CampaniaReclutamiento {
+    empresa = Empresa
+    evaluacion = Evaluacion
+    postulacionesDePosiblesCandidatos = []
+}
+
+CampaniaReclutamiento -> Empresa
+CampaniaReclutamiento --> Evaluacion
+Evaluacion -> Pregunta
+Evaluacion --> Indice
+Pregunta --> Habilidad1
+Pregunta --> Habilidad2
+Pregunta -> RespuestaCorrecta
+Indice --> Metrica
+
+@enduml

@@ -1,0 +1,104 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class Habilidad {
+    String nombre
+}
+
+class RespuestaCorrecta {
+    String detalle
+}
+
+enum TipoPregunta {
+    COMUN
+    CODIGO
+}
+
+class Pregunta {
+    String consigna
+    List<Habilidad> habilidades
+    List<RespuestaCorrecta> respuestasCorrectas
+    TipoPregunta tipo
+}
+
+class Metrica {
+    String nombre
+}
+
+class Indice {
+    String nombre
+    List<Metrica> metricasNecesarias
+}
+
+class Evaluacion {
+    String nombre
+    List<Pregunta> preguntas
+    List<Indice> indices
+}
+
+class Candidato {
+    String nombre
+    String apellido
+}
+
+class IndiceRespuesta {
+    Indice indice
+    Float resultado
+}
+
+class RespuestaEvaluacion {
+    String respuesta
+    Integer puntaje
+    List<IndiceRespuesta> resultadosIndices
+}
+
+class Postulacion {
+    Evaluacion evaluacion
+    Candidato candidato
+    List<RespuestaEvaluacion> respuestas
+}
+
+class Empresa {
+    String nombre
+}
+
+class CampaniaReclutamiento {
+    Empresa empresa
+    Evaluacion evaluacionDeReferencia
+    List<Postulacion> postulacionesDePosiblesCandidatos
+}
+
+class IndiceParametro {
+    Indice indice
+    Float importancia
+}
+
+class ParametrosPonderador {
+    Float importanciaPuntaje
+    List<IndiceParametro> importanciaIndices
+}
+
+class Ponderador {
+    ponderar(List<Postulacion>, ParametrosPonderador): List<Postulacion>
+}
+
+Pregunta --> Habilidad
+Pregunta --> RespuestaCorrecta
+Pregunta --> TipoPregunta
+Evaluacion --> Pregunta
+Evaluacion --> Indice
+Indice -> Metrica
+Postulacion --> Evaluacion
+Postulacion --> Candidato
+Postulacion --> RespuestaEvaluacion
+RespuestaEvaluacion --> IndiceRespuesta
+IndiceRespuesta --> Indice
+CampaniaReclutamiento --> Empresa
+CampaniaReclutamiento --> Evaluacion
+CampaniaReclutamiento -> Candidato
+Ponderador ..> Postulacion
+Ponderador ..> ParametrosPonderador
+ParametrosPonderador --> IndiceParametro
+IndiceParametro --> Indice
+
+@enduml
