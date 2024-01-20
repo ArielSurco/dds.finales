@@ -1,0 +1,22 @@
+@startuml
+'https://plantuml.com/deployment-diagram
+
+actor Empresa
+
+node RebaH {
+    component LoadBalancer
+}
+
+node Servidor1 {
+    component Evaluador1
+}
+
+node Servidor2 {
+    component Evaluador2
+}
+
+Empresa -(0- LoadBalancer : HTTP: Post /campaña
+LoadBalancer ..> Evaluador1
+LoadBalancer ..> Evaluador2
+
+@enduml

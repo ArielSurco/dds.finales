@@ -43,3 +43,27 @@ campania.setPostulacionesDePosiblesCandidatos(postulacionesRecomendadas);
 repositorioCampania.modificar(campania)
 ```
 
+# Arquitectura
+#### 1- Mecanismos de integración asincrónica
+Para calcular los índices de manera asincrónica se podría implementar alguno de los siguientes mecanismos
+
+|                     | WebHook                                                                                                                                                                                                       | Cola de mensajes                                                                                                                                                                   |
+|---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Eficiencia          | Mayor eficiencia debido a que procesa la respuesta del endpoint apenas se recibe                                                                                                                              | Menos eficiente debido a que se procesan las respuestas a medida que el consumidor agarra los mensajes de la cola                                                                  |
+| Tolerancia a fallos | En caso de recibir un gran volumen de solicitudes, se podría caer la API REST por no poder procesarlas todas al mismo tiempo, perdiendo además otras respuestas que podrían llegar mientras esté caida la API | Es más tolerante a fallows debido a que el consumidor va procesando los mensajes de la cola a medida que pueda, evitando que se caiga por el gran volumen de respuestas a procesar |
+
+### 2- Picos de reclutamiento en determinados momentos del año
+Una posible solución es utilizar mecanismos de escalado horizontal, debido a que un escalado vertical del CPU resulta muy limitante respecto de cuánto podemos escalar.
+Además, nos resulta mucho más económico optar por agregar más servidores.
+Para la implementación del escalado horizontal, deberíamos utilizar un Balanceador de Carga, el cual se encargará de distribuir
+las solicitudes hacia cada servidor de manera que no se saturen
+![Diagrama de despliegue](img_2.png)
+
+### 3- Futura interfaz gráfica
+Se podría implementar utilizando:
+- Cliente liviano
+  - Brinda una carga mucho menor en el cliente, debido a que las vistas se renderizan en el servidor, de forma que los datos necesarios para completar las vistas están mucho más cerca, pudiendo acceder a ellos con una gran velocidad
+  - Resulta más dificil de mantener debido a que la lógica visual y de negocio están muy acopladas, de forma que implementar un cliente pesado a futuro se podría volver inviable
+- Cliente liviano con el Front separado de la lógica de negocio
+  - Si bien mantiene una carga reducida en el cliente como la otra alternativa, dicha carga resulta un poco más lenta debido a que se deben consultar los datos a la REST API que exponga nuestro componente Evaluador
+  - Resulta mucho más sencillo de mantener que la otra alternativa, debido a que se mantuvo desacoplada la lógica visual y de negocio, por lo que podrían escalar de manera independiente. Y si a futuro se necesitara un cliente pesado, el cambio resultaría mucho más sencillo que con la otra alternativa
