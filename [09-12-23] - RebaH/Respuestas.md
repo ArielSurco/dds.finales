@@ -68,3 +68,16 @@ Se podría implementar utilizando:
 - Cliente liviano con el Front separado de la lógica de negocio
   - Si bien mantiene una carga reducida en el cliente como la otra alternativa, dicha carga resulta un poco más lenta debido a que se deben consultar los datos a la REST API que exponga nuestro componente Evaluador
   - Resulta mucho más sencillo de mantener que la otra alternativa, debido a que se mantuvo desacoplada la lógica visual y de negocio, por lo que podrían escalar de manera independiente. Y si a futuro se necesitara un cliente pesado, el cambio resultaría mucho más sencillo que con la otra alternativa
+
+# Persistencia
+### 1- Modelo de datos
+![Modelo de datos](img_3.png)
+
+### 2- Justificaciones
+
+- NO persisto ni ParametrosPonderador ni IndiceParametro debido a que son Value Object en mi dominio, sólo se utilizan para juntar parámetros
+- Genero una entidad intermedia entre Pregunta y Habilidad por consistencia, para poder mantener habilidades definidas
+- Por el mismo motivo que el anterior, rompo los ManyToMany entre Indice y Metrica, y el de Evaluacion e Indice
+- El principal impedance mismatch encontrado fue el de TipoPregunta en la entidad Pregunta, pero esto lo resuelvo almacenándolo como un VARCHAR debido a que es un enum
+- Podría considerar desnormalizar, por Performance, la entidad Postulacion, agregando el puntaje ponderado por la clase Ponderador de nuestro dominio.
+

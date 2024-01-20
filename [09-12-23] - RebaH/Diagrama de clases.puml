@@ -95,7 +95,7 @@ RespuestaEvaluacion --> IndiceRespuesta
 IndiceRespuesta --> Indice
 CampaniaReclutamiento --> Empresa
 CampaniaReclutamiento --> Evaluacion
-CampaniaReclutamiento -> Candidato
+CampaniaReclutamiento -> Postulacion
 Ponderador ..> Postulacion
 Ponderador ..> ParametrosPonderador
 ParametrosPonderador --> IndiceParametro
