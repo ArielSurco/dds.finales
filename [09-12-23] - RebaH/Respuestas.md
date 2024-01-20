@@ -57,6 +57,7 @@ Una posible solución es utilizar mecanismos de escalado horizontal, debido a qu
 Además, nos resulta mucho más económico optar por agregar más servidores.
 Para la implementación del escalado horizontal, deberíamos utilizar un Balanceador de Carga, el cual se encargará de distribuir
 las solicitudes hacia cada servidor de manera que no se saturen
+
 ![Diagrama de despliegue](img_2.png)
 
 ### 3- Futura interfaz gráfica
