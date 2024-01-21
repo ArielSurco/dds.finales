@@ -1,0 +1,84 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+entity Sector {
+    <<PK>> id INTEGER
+    ---
+    nombre VARCHAR
+}
+
+entity EntidadEducativa {
+    <<PK>> id INTEGER
+    ---
+    nombre VARCHAR
+}
+
+entity Pago {
+    <<PK>> id INTEGER
+    ---
+    <<FK>> organizacion_id INTEGER
+    monto FLOAT
+    fechaHora DateTime
+}
+
+entity TipoSponsor {
+    <<PK>> id INTEGER
+    ---
+    nombre VARCHAR
+    valor FLOTA
+    espacioEnM2 FLOAT
+}
+
+entity AccionInteresado {
+    <<PK>> id INTEGER
+    ---
+    <<FK>> organizacion_id INTEGER
+    accion VARCHAR
+}
+
+entity Participante {
+    <<PK>> id INTEGER
+    ---
+    nombre VARCHAR
+    apellido VARCHAR
+    dni VARCHAR
+    legajo VARCHAR
+    fechaNacimiento DateTime
+    mail VARCHAR
+    telefono VARCHAR
+    entidadEducativa_id INTEGER
+}
+
+entity SectorDeInteres {
+    <<PK, FK>> participante_id INTEGER
+    <<PK, FK>> sector_id INTEGER
+}
+
+entity Organizacion {
+    <<PK>> id INTEGER
+    ---
+    nombre VARCHAR
+    <<FK>> sector_id INTEGER
+    descripcion VARCHAR
+    contactoPrincipal VARCHAR
+    medioDeContacto VARCHAR
+    estaExentaDePago BOOLEAN
+    <<FK>> tipoSponsor_id INTEGER
+}
+
+entity ParticipanteInteresado {
+    <<PK, FK>> participante_id INTEGER
+    <<PK, FK>> organizacion_id INTEGER
+}
+
+Sector ||--o{ Organizacion
+Sector ||--o{ SectorDeInteres
+SectorDeInteres }o--|| Participante
+Organizacion ||--o{ ParticipanteInteresado
+Participante ||-o{ ParticipanteInteresado
+TipoSponsor |o--o{ Organizacion
+Organizacion ||-o{ AccionInteresado
+Pago }o--|| Organizacion
+Participante }o--|| EntidadEducativa
+
+@enduml

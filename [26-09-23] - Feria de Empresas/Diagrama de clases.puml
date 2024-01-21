@@ -1,0 +1,98 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class Organizacion {
+    String nombre
+    Sector sector
+    String logo
+    String descripcion
+    String contactoPrincipal
+    MedioContacto medioDeContacto
+    boolean estaExentaDePago
+    TipoSponsor tipoSponsor
+    List<Participante> interesados
+    List<AccionInteresado> acciones
+}
+
+class Sector {
+    String nombre
+}
+
+enum MedioContacto {
+    TELEFONO
+    EMAIL
+}
+
+class TipoSponsor {
+    String nombre
+    Float valor
+    Float espacioEnM2
+}
+
+class Participante {
+    String nombre
+    String apellido
+    String dni
+    String legajo
+    LocalDate fechaNacimiento
+    String mail
+    String telefono
+    EntidadEducativa entidadEducativa
+    List<Sector> sectoresDeInteres
+}
+
+class EntidadEducativa {
+    String nombre
+}
+
+interface AdapterDatosParticipante {
+    obtenerParticipante(String dni, String legajo): Participante
+}
+
+class Pago {
+    Organizacion organizacion
+    Float monto
+    LocalDateTime fechaHora
+}
+
+interface AccionInteresado {
+    realizar(Organizacion, Participante): void
+}
+
+class AccionEnviarMailAInteresado {
+    realizar(Organizacion, Participante): void
+}
+
+class AccionEnviarMailAEmpresa {
+    realizar(Organizacion, Participante): void
+}
+
+class AccionEnviarWhatsappAInteresado {
+    realizar(Organizacion, Participante): void
+}
+
+interface AdapterMail {
+    enviarMail(String correo, String mensaje): void
+}
+
+interface AdapterWhatsapp {
+    enviarWhatsapp(String numero, String mensaje): void
+}
+
+Sector <-- Organizacion
+Organizacion --> MedioContacto
+Organizacion --> TipoSponsor
+Participante <- Organizacion
+Organizacion -> AccionInteresado
+AccionInteresado --> AccionEnviarMailAInteresado
+AccionInteresado --> AccionEnviarMailAEmpresa
+AccionInteresado --> AccionEnviarWhatsappAInteresado
+AccionEnviarMailAEmpresa ..> AdapterMail
+AccionEnviarMailAInteresado ..> AdapterMail
+AccionEnviarWhatsappAInteresado ..> AdapterWhatsapp
+EntidadEducativa <- Participante
+Sector <-- Participante
+Participante <.. AdapterDatosParticipante
+Pago --> Organizacion
+
+@enduml
