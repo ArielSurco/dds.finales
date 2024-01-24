@@ -4,11 +4,21 @@
 
 ### 2- Justificaciones
 
+- Debido a la integración con un servicio externo para la obtención de datos de participante, se opta por usar un patrón Adapter, aportando extensibilidad y mantenibilidad
+- Se utiliza el patrón Command donde Organización es el Invocador y AccionInteresado es la interface del comando, para ganar extensibilidad y alta cohesión en la configuración y ejecución de cada acción a realizar. Manteniendo la posibilidad de configurar cuáles y en qué orden se ejecutan
+- Se emplea el patrón adapter tanto para el envío de mails y de whatsapp para evitar el acoplamiento con implementaciones concretas con determinadas librerías, que podrían cambiar en un futuro
+
 # Persistencia
 ### 1- Modelo de datos
 ![Modelo de datos](img_1.png)
 
 ### 2- Justificaciones
+
+- Se persiste Sector para que los Participante y Organizacion puedan tener intereses en común que será útil para las recomendaciones que se le podrían al Participante según sus sectores de interés
+- Se persiste SectorDeInteres para romper la relación ManyToMany entre Participante y Sector
+- Se persiste ParticipanteInteresado para romper la relación ManyToMany entre Participante y Organización
+- Para resolver el Impedance Mismatch que surge por el enum MedioContacto, se persiste el valor del enum como un VARCHAR
+- Para resolver el Impedance Mismatch que surge por quere almacenar clases Stateless, persistimos las acciones configuradas por la organización (para resolver la lista de acciones) y guardamos un VARCHAR que identifique a la clase de la acción correspondiente, para esto se utilizaría un @Converter
 
 # Arquitectura
 ### 1- Gestión de cambio de pasarela de pago
