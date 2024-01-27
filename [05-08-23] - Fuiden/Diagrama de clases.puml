@@ -1,0 +1,105 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class Producto {
+    String nombre
+    String descripcion
+    String codEAN
+    String codSKU
+    List<Categoria> categorias
+    Tamanio tamanio
+    Int stock
+}
+
+class Categoria {
+    String nombre
+}
+
+enum Tamanio {
+    CHICO
+    MEDIANO
+    GRANDE
+}
+
+class Evento {
+    String id
+    String recurso
+    Int usuarioId
+    String topico
+    Int aplicacionId
+    Int intentos
+    LocalDateTime enviado
+}
+
+class ReceptorEventos {
+    AdapterRecursoPedido adapter
+    procesarEvento(Evento): void
+}
+
+interface AdapterRecursoPedido {
+    obtenerRecurso(String recurso): Pedido
+}
+
+class Pedido {
+    Int id
+    LocalDateTime fechaCreacion
+    Double total
+    List<PedidoItem> items
+    String monedaId
+    Int envioId
+    EstadoPedido estado
+    Int vendedorId
+    String motivoRechazo
+    Evento eventoAsociado
+    ---
+    generadoPorEvento(): boolean
+}
+
+enum EstadoPedido {
+    PENDIENTE
+    CONFIRMADO
+    RECHAZADO
+    STAND_BY
+    DESPACHADO
+}
+
+class PedidoItem {
+    ProductoItem item
+    Int cantidad
+    Double precioUnitario
+}
+
+class ProductoItem {
+    String id
+    String titulo
+    String sku
+}
+
+class MovimientoStock {
+    Producto producto
+    LocalDateTime fechaHora
+    TipoMovimiento tipo
+    Int cantidad
+    Pedido pedido
+}
+
+enum TipoMovimiento {
+    INGRESO
+    EGRESO
+    AJUSTE
+}
+
+Producto --> Categoria
+Producto --> Tamanio
+Evento <. ReceptorEventos
+ReceptorEventos ..> AdapterRecursoPedido
+AdapterRecursoPedido ..> Pedido
+Pedido --> EstadoPedido
+Pedido -> PedidoItem
+PedidoItem --> ProductoItem
+Producto <- MovimientoStock
+MovimientoStock --> TipoMovimiento
+MovimientoStock -> Pedido
+Evento <-- Pedido
+
+@enduml

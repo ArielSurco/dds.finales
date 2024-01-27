@@ -1,0 +1,84 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+entity Producto {
+    <<PK>> id INTEGER
+    ---
+    nombre VARCHAR
+    descripcion VARCHAR
+    codEAN VARCHAR
+    codSKU VARCHAR
+    tamanio VARCHAR
+    stock INTEGER
+}
+
+entity Categoria_Producto {
+    <<PK, FK>> producto_id
+    <<PK, FK>> categoria_id
+}
+
+entity Categoria {
+    <<PK>> id INTEGER
+    ---
+    nombre VARCHAR
+}
+
+entity MovimientoStock {
+    <<PK>> id INTEGER
+    ---
+    fechaHora DateTime
+    tipo VARCHAR
+    cantidad INTEGER
+    <<FK>> pedido_id
+}
+
+entity Pedido {
+    <<PK>> id INTEGER
+    ---
+    fechaCreacion DateTime
+    total DOUBLE
+    monedaId VARCHAR
+    envioId INTEGER
+    estado VARCHAR
+    vendedorId INTEGER
+    motivoRechazo VARCHAR
+    <<FK>> eventoAsociado_id VARCHAR
+}
+
+entity PedidoItem {
+    <<PK>> id INTEGER
+    ---
+    <<FK>> pedido_id INTEGER
+    cantidad INTEGER
+    precioUnitario Double
+}
+
+entity ProductoItem {
+    <<PK>> id INTEGER
+    ---
+    <<FK>> pedidoItem_id INTEGER
+    producto_id VARCHAR
+    titulo VARCHAR
+    sku VARCHAR
+}
+
+entity Evento {
+    <<PK>> id VARCHAR
+    ---
+    recurso VARCHAR
+    usuarioId INTEGER
+    topico VARCHAR
+    aplicacionId INTEGER
+    intentos INTEGER
+    enviado DateTime
+}
+
+Producto ||--|{ Categoria_Producto
+Categoria_Producto }o-|| Categoria
+Producto ||-o{ MovimientoStock
+MovimientoStock ||-o| Pedido
+Pedido ||--|{ PedidoItem
+PedidoItem ||-|{ ProductoItem
+Pedido |o-o| Evento
+
+@enduml
