@@ -1,0 +1,39 @@
+@startuml
+'https://plantuml.com/deployment-diagram
+
+node AppServer {
+    component Recetas
+    component Acciones
+    component Disparadores
+    component ColaDeAcciones
+    component Autenticacion
+}
+
+node Google {
+    component Gmail
+}
+
+node SistemaElectrico {
+    component Notificador
+}
+
+node MEGA {
+    component Adjuntos
+}
+
+node ServiciosProgramados {
+    component Apagador
+}
+
+component SSO
+
+SSO -- Autenticacion
+Recetas <-- Disparadores
+Recetas --> ColaDeAcciones
+Acciones --> ColaDeAcciones
+Disparadores -(0- Gmail : HTTP
+Disparadores -0)- Notificador : HTTP
+Acciones -(0- Adjuntos : HTTP
+Acciones - Apagador : SSH
+
+@enduml

@@ -1,0 +1,82 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+abstract class ConectorPeriodico {
+    # String tipo
+    # Credenciales credenciales
+    # Int periodicidadSeg
+    # String detalle
+    # notificar(Receta): void
+}
+
+class ConectorEspera {
+    # Endpoint endpoint
+    # notificar(Receta): void
+}
+
+class Credenciales {
+    String correo
+    String contrasenia
+}
+
+class Endpoint {
+    String dominio
+    String ruta
+}
+
+class Evento {
+    String contenido
+    List<String> adjuntos
+    JSON json
+}
+
+interface Filtro {
+    evaluar(Evento): boolean
+}
+
+interface FiltroTexto implements Filtro {
+    evaluar(Evento): boolean
+}
+
+interface FiltroAdjunto implements Filtro {
+    evaluar(Evento): boolean
+}
+
+abstract class Condicion implements Filtro {
+    # List<Filtro> filtros
+    # evaluar(Evento): boolean
+}
+
+class CondicionAND extends Condicion {
+    List<Filtro> filtros
+    evaluar(Evento): boolean
+}
+
+class CondicionOR extends Condicion {
+    List<Filtro> filtros
+    evaluar(Evento): boolean
+}
+
+interface  Accion {
+    ejecutar(Evento): void
+}
+
+class Receta {
+    ConectorEspera conectorEspera
+    ConectorPeriodico conectorPeriodico
+    Filtro filtros
+    Accion accion
+    procesarEvento(Evento): void
+    setConector(ConectorEspera): void
+    setConector(ConectorPeriodico): void
+}
+
+Receta --> ConectorPeriodico
+Receta --> ConectorEspera
+Receta -> Filtro
+Accion -> Receta
+ConectorPeriodico --> Credenciales
+ConectorEspera --> Endpoint
+Evento <.. Receta
+
+@enduml

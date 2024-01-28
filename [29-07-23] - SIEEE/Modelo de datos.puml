@@ -1,0 +1,65 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+entity Receta {
+    <<PK>> id INTEGER
+    ---
+    <<FK>> conectorPeriodico_id INTEGER
+    <<FK>> conectorEspera_id INTEGER
+    <<FK>> filtro_id INTEGER
+    accion VARCHAR
+}
+
+entity ConectorPeriodico {
+    <<PK>> id INTEGER
+    ---
+    tipo VARCHAR
+    periodicidadSeg INTEGER
+    detalle VARCHAR
+    credenciales_correo VARCHAR
+    credenciales_contrasenia VARCHAR
+}
+
+entity ConectorEspera {
+    <<PK>> id INTEGER
+    ---
+    endpoint_dominio VARCHAR
+    endpoint_ruta VARCHAR
+}
+
+entity Filtro {
+    <<PK>> id INTEGER
+    ---
+    tipo VARCHAR
+}
+
+entity Condicion {
+    <<PK>> id INTEGER
+    ---
+    <<FK>> filtro_id INTEGER
+    <<FK>> filtro_compuesto_id INTEGER
+    tipo VARCHAR
+}
+
+entity Evento {
+    <<PK>> id INTEGER
+    ---
+    contenido VARCHAR
+    json VARCHAR
+}
+
+entity Adjunto {
+    <<PK>> id INTEGER
+    ---
+    <<FK>> evento_id INTEGER
+    url VARCHAR
+}
+
+Receta }o--o| ConectorPeriodico
+Receta }o--o| ConectorEspera
+Receta }o-|| Filtro
+Condicion }o--|| Filtro
+Condicion }o--|| Filtro
+Evento ||-o{ Adjunto
+
+@enduml
