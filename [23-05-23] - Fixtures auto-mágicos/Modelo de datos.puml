@@ -1,0 +1,82 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+entity Equipo {
+    <<PK>> id INTEGER
+    ---
+    cantMinimaIntegrantes INTEGER
+    nombre VARCHAR
+    nivelExperiencia VARCHAR
+    <<FK>> categoria_id INTEGER
+}
+
+entity Categoria {
+    <<PK>> id INTEGER
+    ---
+    nombre VARCHAR
+}
+
+entity Integrante {
+    <<PK>> id INTEGER
+    ---
+    nombre VARCHAR
+    numero INTEGER
+    <<FK>> equipo_id INTEGER
+}
+
+entity Torneo {
+    <<PK>> id INTEGER
+    ---
+    nombre VARCHAR
+    tipo VARCHAR
+    rangoHorario_horaInicio TIME
+    rangoHorario_horaFin TIME
+    duracionPartidaMin INTEGER
+    duracionDescansoMin INTEGER
+}
+
+entity DiaSemana_Torneo {
+    <<PK>> id INTEGER
+    ---
+    diaSemana VARCHAR
+    <<FK>> torneo_id INTEGER
+}
+
+entity Fecha {
+    <<PK>> id INTEGER
+    ---
+    dia Date
+    cantEquiposPorCategoria INTEGER
+    <<FK>> torneo_id INTEGER
+}
+
+entity Fixture {
+    <<PK>> id INTEGER
+    ---
+    <<FK>> torneo_id INTEGER
+    aceptado INTEGER
+    fechaHoraGeneracion DATETIME
+    usuarioGenerador VARCHAR
+}
+
+entity Partido {
+    <<PK>> id INTEGER
+    ---
+    <<FK>> fixture_id INTEGER
+    <<FK>> equipoA_id INTEGER
+    <<FK>> equipoB_id INTEGER
+    <<FK>> fecha_id INTEGER
+    <<FK>> categoria_id INTEGER
+}
+
+Partido }o--|| Equipo
+Partido }o--|| Equipo
+Partido }|-|| Fixture
+Partido }o--|| Fecha
+Partido }o--|| Categoria
+Fecha }|--|| Torneo
+Torneo ||-|{ DiaSemana_Torneo
+Equipo ||--|{ Integrante
+Categoria ||-o{ Equipo
+
+@enduml

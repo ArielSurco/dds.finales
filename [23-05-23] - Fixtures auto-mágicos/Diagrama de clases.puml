@@ -1,0 +1,96 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class Equipo {
+    static Int CANT_MAX_INTEGRANTES
+    Int cantMinimaIntegrantes
+    String nombre
+    NivelExperiencia nivelExperiencia
+    List<Integrante> integrantes
+    Categoria categoria
+}
+
+class Integrante {
+    String nombre
+    Int numero
+}
+
+enum NivelExperiencia {
+    BAJO
+    MEDIO
+    ALTO
+    EXPERTO
+}
+
+class Categoria {
+    String nombre
+}
+
+class Torneo {
+    String nombre
+    String tipo
+    List<DiaSemana> diasSemana
+    RangoHorario rangoHorario
+    List<Fecha> fechas
+    Int duracionPartidaMin
+    Int duracionDescansoMin
+}
+
+enum DiaSemana {
+    LUNES
+    MARTES
+    MIERCOLES
+    JUEVES
+    VIERNES
+    SABADO
+    DOMINGO
+}
+
+class RangoHorario {
+    LocalTime horaInicio
+    LocalTime horaFin
+}
+
+class Fecha {
+    LocalDate dia
+    Int cantEquiposPorCategoria
+}
+
+interface GeneradorFixture {
+    generar(Torneo, List<Equipo>): Fixture
+}
+
+class GeneradorFixtureMemetico implements GeneradorFixture {
+    generar(Torneo, List<Equipo>): Fixture
+}
+
+class GeneradorFixtureTabu implements GeneradorFixture {
+    generar(Torneo, List<Equipo>): Fixture
+}
+
+class Fixture {
+    Torneo torneo
+    List<Partido> partidos
+    boolean aceptado
+    LocalDateTime fechaHoraGeneracion
+    String usuarioGenerador
+}
+
+class Partido {
+    Equipo equipoA
+    Equipo equipoB
+    Fecha fecha
+}
+
+Equipo --> NivelExperiencia
+Equipo --> Integrante
+Equipo --> Categoria
+Torneo --> DiaSemana
+Torneo --> RangoHorario
+Fecha <-- Torneo
+Fixture <.. GeneradorFixture
+Partido <-- Fixture
+Partido --> Equipo
+Partido --> Fecha
+
+@enduml
