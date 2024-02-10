@@ -1,0 +1,70 @@
+@startuml
+
+entity Pregunta {
+    <<PK>> id INTEGER
+    ---
+    tipo INTEGER
+    enunciado VARCHAR
+}
+
+entity Opcion {
+    <<PK>> id INTEGER
+    ---
+    <<FK>> pregunta_id INTEGER
+    detalle VARCHAR
+}
+
+entity Cuestionario {
+    <<PK>> id INTEGER
+    ---
+    nombre VARCHAR
+}
+
+entity Cuestionario_Pregunta {
+    <<PK, FK>> cuestionario_id INTEGER
+    <<PK, FK>> pregunta_id INTEGER
+}
+
+entity Respuesta {
+    <<PK>> id INTEGER
+    ---
+    <<FK>> preDiagnostico_id INTEGER
+    <<FK>> pregunta_id INTEGER
+    respuestaLibre VARCHAR
+}
+
+entity Respuesta_Opcion {
+    <<PK, FK>> respuesta_id INTEGER
+    <<PK, FK>> opcion_id INTEGER
+}
+
+entity PreDiagnostico {
+    <<PK>> id INTEGER
+    ---
+    <<FK>> cuestionario_id INTEGER
+}
+
+entity Seccion {
+    <<PK>> id INTEGER
+    ---
+    titulo VARCHAR
+    descripcion VARCHAR
+}
+
+entity PreDiagnostico_Seccion {
+    <<PK, FK>> preDiagnostico_id INTEGER
+    <<PK, FK>> seccion_id INTEGER
+}
+
+PreDiagnostico ||-|{ PreDiagnostico_Seccion
+PreDiagnostico_Seccion }o--|| Seccion
+Cuestionario ||-o{ PreDiagnostico
+Cuestionario ||--|{ Cuestionario_Pregunta
+Cuestionario_Pregunta }o--|| Pregunta
+Respuesta }o--|| Pregunta
+PreDiagnostico ||--|{ Respuesta
+Pregunta ||--o{ Opcion
+Respuesta ||--o{ Respuesta_Opcion
+Respuesta_Opcion }o--|| Opcion
+
+@enduml

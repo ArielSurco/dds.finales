@@ -1,0 +1,86 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class Pregunta {
+    TipoPregunta tipo
+    String enunciado
+    List<Opcion> opciones
+}
+
+enum TipoPregunta {
+    ELECCION_UNICA
+    ELECCION_MULTIPLE
+    LIBRE
+}
+
+class Opcion {
+    String detalle
+}
+
+class Respuesta {
+    Pregunta pregunta
+    String respuestaLibre
+    List<Opcion> opcionesElegidas
+}
+
+class Cuestionario {
+    String nombre
+    List<Pregunta> preguntas
+}
+
+class PreDiagnostico {
+    Cuestionario cuestionario
+    List<Respuesta> respuestas
+    List<Seccion> secciones
+}
+
+class Seccion {
+    String titulo
+    String descripcion
+}
+
+class GeneradorPreDiagnostico {
+    generar(Cuestionario, List<Respuesta>): PreDiagnostico
+}
+
+class ExportadorPreDiagnostico {
+    ExportarAPDFAdapter exportador
+    exportar(PreDiagnostico): string
+}
+
+interface ExportarAPDFAdapter {
+    exportar(Map<String, List<String>>): String
+}
+
+class ExportarAPDF implements ExportarAPDFAdapter {
+    exportar(Map<String, List<String>>): String
+}
+
+interface AdapterWhatsapp {
+    enviarMensaje(String destinatario, String mensaje): void
+}
+
+class WhatsappSender implements AdapterWhatsapp {
+    enviarMensaje(String destinatario, String mensaje): void
+}
+
+class NotificadorPreDiagnostico {
+    AdapterWhatsapp notificador
+    notificar(String destinatario, PreDiagnostico): void
+}
+
+Pregunta --> TipoPregunta
+Pregunta --> Opcion
+Pregunta <- Respuesta
+Respuesta --> Opcion
+Cuestionario --> Pregunta
+PreDiagnostico -> Seccion
+GeneradorPreDiagnostico ..> PreDiagnostico
+Cuestionario <- PreDiagnostico
+PreDiagnostico --> Respuesta
+PreDiagnostico <.. ExportadorPreDiagnostico
+ExportadorPreDiagnostico --> ExportarAPDFAdapter
+PreDiagnostico <.. NotificadorPreDiagnostico
+NotificadorPreDiagnostico --> AdapterWhatsapp
+
+@enduml
