@@ -1,0 +1,136 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class MedicionTermica {
+    LocalDateTime fechaHora
+    Float temperatura
+}
+
+class MedicionCardiaca {
+    LocalDateTime fechaHora
+    Int frecuencia
+}
+
+class MedicionGeoposicional {
+    LocalDateTime fechaHora
+    Float latitud
+    Float longitud
+    Float recorridoKm
+}
+
+class Dispositivo {
+    LocalDate fechaColocacion
+    String numero
+    List<MedicionTermica> medicionesTermicas
+    List<MedicionCardiaca> medicionesCardiacas
+    List<MedicionGeoposicional> medicionesGeoposicionales
+    recibirMedicionTermica(MedicionTermica): void
+    recibirMedicionCardiaca(MedicionCardiaca): void
+    recibirMedicionGeoposicional(MedicionGeoposicional): void
+}
+
+class ReceptorTermico {
+    recibirDato(Dispositivo, CSV): void
+}
+
+class ReceptorCardiaco {
+    recibirDato(Dispositivo, JSON): void
+}
+
+class ReceptorGeoposicional {
+    recibirDato(Dispositivo, TXT): void
+}
+
+class Animal {
+    Dispositivo dispositivo
+    Especie especie
+    Float peso
+    Float altura
+    Grupo grupo
+    Color color
+    Colonia colonia
+}
+
+class Especie {
+    String nombre
+    String descripcion
+    List<String> caracteristicas
+}
+
+class Grupo {
+    String nombre
+}
+
+class Color {
+    String nombre
+}
+
+class Cientifico {
+    String nombre
+    String apellido
+    Especializacion area
+    String matricula
+}
+
+class Especializacion {
+    String nombre
+}
+
+class Estudio {
+    String nombre
+    String descripcion
+    Cientifico autor
+    LocalDate fecha
+    Colonia colonia
+    List<Grupo> grupos
+    EstadoEstudio estado
+    String publicacion
+    LocalDateTime lastUpdate
+    LocalDateTime createdAt
+}
+
+class Colonia {
+    String nombre
+}
+
+enum EstadoEstudio {
+    EN_PROCESO
+    FINALIZADO
+    EN_REVISION
+    PUBLICADO
+}
+
+interface GeneradorSecciones {
+    generar(Estudio): String
+}
+
+class ExportarEstudioAPDF {
+    ExportadorAPDFAdapter exportador
+    exportar(Estudio): String
+}
+
+interface ExportadorAPDFAdapter {
+    exportar(Map<String, List<String>>): String
+}
+
+Dispositivo --> MedicionTermica
+Dispositivo --> MedicionCardiaca
+Dispositivo --> MedicionGeoposicional
+MedicionTermica <.. ReceptorTermico
+MedicionCardiaca <.. ReceptorCardiaco
+MedicionGeoposicional <.. ReceptorGeoposicional
+Dispositivo <- Animal
+Especie <-- Animal
+Grupo <-- Animal
+Animal --> Color
+Animal --> Colonia
+Estudio --> Colonia
+Grupo <-- Estudio
+Cientifico <-- Estudio
+Estudio <.. ExportarEstudioAPDF
+Especializacion <-- Cientifico
+Estudio -> EstadoEstudio
+Estudio <.. GeneradorSecciones
+ExportarEstudioAPDF --> ExportadorAPDFAdapter
+
+@enduml

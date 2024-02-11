@@ -1,0 +1,129 @@
+@startuml
+
+entity Dispositivo {
+    <<PK>> numero VARCHAR
+    ---
+    fechaColocacion DATE
+}
+
+entity MedicionTermica {
+    <<PK>> id INTEGER
+    ---
+    fechaHora DATETIME
+    temperatura FLOAT
+    <<FK>> dispositivo_numero VARCHAR
+}
+
+entity MedicionCardiaca {
+    <<PK>> id INTEGER
+    ---
+    fechaHora DATETIME
+    frecuencia INTEGER
+    <<FK>> dispositivo_numero VARCHAR
+}
+
+entity MedicionGeoposicional {
+    <<PK>> id INTEGER
+    ---
+    fechaHora DATETIME
+    latitud FLOAT
+    longitud FLOAT
+    recorridoKm FLOAT
+    <<FK>> dispositivo_numero VARCHAR
+}
+
+entity Animal {
+    <<PK>> id INTEGER
+    ---
+    <<FK>> dispositivo_numero VARCHAR
+    <<FK>> especie_id INTEGER
+    peso FLOAT
+    altura FLOAT
+    <<FK>> grupo_id INTEGER
+    <<FK>> color_id INTEGER
+    <<FK>> colonia_id INTEGER
+}
+
+entity Especie {
+    <<PK>> id INTEGER
+    ---
+    nombre VARCHAR
+    descripcion VARCHAR
+}
+
+entity Caracteristica {
+    <<FK>> especie_id
+    detalle VARCHAR
+}
+
+entity Grupo {
+    <<PK>> id INTEGER
+    ---
+    nombre VARCHAR
+    <<FK>> estudio_id INTEGER
+}
+
+entity Color {
+    <<PK>> id INTEGER
+    ---
+    nombre VARCHAR
+}
+
+entity Colonia {
+    <<PK>> id INTEGER
+    ---
+    nombre VARCHAR
+}
+
+entity Especializacion {
+    <<PK>> id INTEGER
+    ---
+    nombre VARCHAR
+}
+
+entity Cientifico {
+    <<PK>> id INTEGER
+    ---
+    nombre VARCHAR
+    apellido VARCHAR
+    <<FK>> area_id INTEGER
+    matricula VARCHAR
+}
+
+entity Estudio {
+    <<PK>> id INTEGER
+    ---
+    nombre VARCHAR
+    descripcion VARCHAR
+    <<FK>> autor_id INTEGER
+    fecha DATE
+    <<FK>> colonia_id INTEGER
+    estado INTEGER
+    publicacion VARCHAR
+    lastUpdate DATETIME
+    createdAt DATETIME
+}
+
+entity Estudio_Trazabilidad {
+    <<PK>> id INTEGER
+    ---
+    <<FK>> estudio_id INTEGER
+    estado INTEGER
+}
+
+Dispositivo ||--o{ MedicionTermica
+Dispositivo ||--o{ MedicionCardiaca
+Dispositivo ||--o{ MedicionGeoposicional
+Dispositivo ||-|| Animal
+Especie ||--o{ Animal
+Grupo ||--o{ Animal
+Animal }o--|| Color
+Animal }o-|| Colonia
+Grupo }|--|| Estudio
+Estudio }o--|| Colonia
+Estudio }o-|| Cientifico
+Especializacion ||--o{ Cientifico
+Caracteristica }o--|| Especie
+Estudio ||--|{ Estudio_Trazabilidad
+
+@enduml
