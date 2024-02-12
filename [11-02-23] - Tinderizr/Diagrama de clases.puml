@@ -1,0 +1,105 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class Dominio {
+    String nombre
+    TipoPerfil tipo
+    List<Pregunta> campos
+    boolean esMultiple
+    Int cantMinimaParticipantes
+}
+
+class Perfil {
+    String nombre
+    String descripcion
+    String foto
+    Dominio dominio
+    List<Respuesta> respuestasCampos
+    List<Tag> tags
+}
+
+class TipoPerfil {
+    String nombre
+}
+
+class Pregunta {
+    String enunciado
+    List<Opcion> opciones
+    boolean esObligatorio
+}
+
+class Opcion {
+    String detalle
+}
+
+class Respuesta {
+    Pregunta pregunta
+    List<Opcion> elecciones
+}
+
+class Tag {
+    String nombre
+}
+
+class Recomendador {
+    RecomendadorAdapter adapter
+    buscar(Perfil, Filtro): Perfil
+}
+
+interface RecomendadorAdapter {
+    recomendar(Perfil, Filtro): Perfil
+}
+
+class Filtro {
+    TipoPerfil tipo
+    List<Tag> tags
+}
+
+class VinculacionSimple {
+    Perfil interesado
+    Perfil interesante
+    boolean fueAceptada
+    LocalDateTime createdAt
+    LocalDateTime updatedAt
+}
+
+class VinculacionMultiple {
+    List<Perfil> perfiles
+    LocalDateTime createdAt
+    LocalDateTime updatedAt
+}
+
+class VinculadorMultiple {
+    vinculaciones(Perfil): List<Perfil>
+}
+
+class NotificadorExternos {
+    NotificadorExternosAdapter adapter
+
+    notificar(VinculacionMultiple): void
+    notificar(VinculacionSimple): void
+}
+
+interface NotificadorExternosAdapter {
+    notificar(VinculacionMultiple): void
+    notificar(VinculacionSimple): void
+}
+
+TipoPerfil <- Dominio
+Dominio --> Pregunta
+Pregunta --> Opcion
+Dominio <- Perfil
+Perfil --> Respuesta
+Respuesta --> Opcion
+Perfil --> Tag
+VinculacionSimple --> Perfil
+VinculacionMultiple --> Perfil
+Filtro <. Recomendador
+Perfil <. VinculadorMultiple
+Recomendador ..> Perfil
+RecomendadorAdapter <-- Recomendador
+NotificadorExternosAdapter <-- NotificadorExternos
+NotificadorExternos ..> VinculacionSimple
+NotificadorExternos ..> VinculacionMultiple
+
+@enduml

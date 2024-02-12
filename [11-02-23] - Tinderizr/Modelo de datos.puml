@@ -1,0 +1,100 @@
+@startuml
+
+entity Dominio {
+    <<PK>> id INTEGER
+    ---
+    nombre VARCHAR
+    <<FK>> tipo_id INTEGER
+    esMultiple INTEGER
+    cantMinimaParticipantes INTEGER
+}
+
+entity TipoPerfil {
+    <<PK>> id INTEGER
+    ---
+    nombre VARCHAR
+}
+
+entity Pregunta {
+    <<PK>> id INTEGER
+    ---
+    enunciado VARCHAR
+    esObligatorio INTEGER
+}
+
+entity Opcion {
+    <<PK>> id INTEGER
+    ---
+    <<FK>> pregunta_id INTEGER
+    detalle VARCHAR
+}
+
+entity Perfil {
+    <<PK>> id INTEGER
+    ---
+    nombre VARCHAR
+    descripcion VARCHAR
+    foto VARCHAR
+    <<FK>> dominio_id INTEGER
+}
+
+entity Respuesta {
+    <<PK>> id INTEGER
+    ---
+    <<FK>> perfil_id INTEGER
+    <<FK>> pregunta_id INTEGER
+}
+
+entity Respuesta_Opcion {
+    <<PK, FK>> respuesta_id INTEGER
+    <<PK, FK>> opcion_id INTEGER
+}
+
+entity Tag {
+    <<PK>> id INTEGER
+    ---
+    nombre VARCHAR
+}
+
+entity Perfil_Tag {
+    <<PK, FK>> perfil_id INTEGER
+    <<PK, FK>> tag_id INTEGER
+}
+
+entity VinculacionSimple {
+    <<PK>> id INTEGER
+    ---
+    <<FK>> interesado_id INTEGER
+    <<FK>> interesante_id INTEGER
+    fueAceptada INTEGER
+    createdAt DATETIME
+    updatedAt DATETIME
+}
+
+entity VinculacionMultiple {
+    <<PK>> id INTEGER
+    ---
+    createdAt DATETIME
+    updatedAt DATETIME
+}
+
+entity VinculacionMultiple_Perfil {
+    <<PK, FK>> vinculacionMultiple_id INTEGER
+    <<PK, FK>> perfil_id INTEGER
+}
+
+TipoPerfil ||-o{ Dominio
+Dominio ||--o{ Pregunta
+Pregunta ||--|{ Opcion
+Dominio ||-o{ Perfil
+Perfil ||--o{ Respuesta
+Respuesta ||--o{ Respuesta_Opcion
+Opcion ||-o{ Respuesta_Opcion
+Perfil ||--o{ Perfil_Tag
+Perfil_Tag }o--|| Tag
+VinculacionSimple }o--|| Perfil
+VinculacionSimple }o--|| Perfil
+VinculacionMultiple ||--|{ VinculacionMultiple_Perfil
+Perfil ||-o{ VinculacionMultiple_Perfil
+
+@enduml
