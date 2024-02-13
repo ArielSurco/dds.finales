@@ -1,0 +1,93 @@
+@startuml
+
+entity Juego {
+    <<PK>> id INTEGER
+    ---
+    nombre VARCHAR
+    requerimientos_cpu VARCHAR
+    requerimientos_memoria VARCHAR
+    requermimientos_almacenamiento VARCHAR
+    <<FK>> genero_id INTEGER
+    precio FLOAT
+}
+
+entity Genero {
+    <<PK>> id INTEGER
+    ---
+    nombre VARCHAR
+}
+
+entity Caracteristica {
+    <<PK>> id INTEGER
+    ---
+    <<FK>> genero_id INTEGER
+    nombre VARCHAR
+}
+
+entity Atributo {
+    <<PK>> id INTEGER
+    ---
+    <<FK>> juego_id INTEGER
+    <<FK>> campo_id INTEGER
+    detalle VARCHAR
+}
+
+entity Campo {
+    <<PK>> id INTEGER
+    ---
+    descripcion VARCHAR
+    esObligatorio INTEGER
+    <<FK>> formularioAltaJuego_id INTEGER
+}
+
+entity FormularioAltaJuego {
+    <<PK>> id INTEGER
+    ---
+    nombre VARCHAR
+}
+
+entity Producto {
+    <<PK>> id INTEGER
+    ---
+    <<FK>> juego_id INTEGER
+    nombre VARCHAR
+    precio FLOAT
+    esDLC INTEGER
+}
+
+entity Compra {
+    <<PK>> id INTEGER
+    ---
+    <<FK>> producto_id INTEGER
+    medioDePago INTEGER
+    <<FK>> comprador_id INTEGER
+    fechaHora DATETIME
+    total FLOAT
+}
+
+entity Cuenta {
+    usuario VARCHAR
+}
+
+entity Prestamo {
+    <<PK>> id INTEGER
+    ---
+    <<FK>> producto_id INTEGER
+    fechaFin DATE
+    <<FK>> prestamista_id INTEGER
+    <<FK>> adquirente_id INTEGER
+}
+
+Juego }o--|| Genero
+Genero ||--o{ Caracteristica
+Juego ||--o{ Atributo
+Atributo }o--|| Campo
+Campo }|--|| FormularioAltaJuego
+Juego ||-o{ Producto
+Producto ||--o{ Prestamo
+Producto ||-o{ Compra
+Compra }o--|| Cuenta
+Prestamo }o-|| Cuenta
+Prestamo }o-|| Cuenta
+
+@enduml

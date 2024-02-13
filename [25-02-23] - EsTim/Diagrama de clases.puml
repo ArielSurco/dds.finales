@@ -1,0 +1,121 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class Juego {
+    String nombre
+    Requerimientos requerimientos
+    Genero genero
+    List<Atributo> atributos
+    Float precio
+}
+
+class Requerimientos {
+    String cpu
+    String memoria
+    String almacenamiento
+}
+
+class Genero {
+    String nombre
+    List<Caracteristica> caracteristicas
+}
+
+class Caracteristica {
+    String nombre
+}
+
+class Producto {
+    Juego juego
+    String nombre
+    Float precio
+    boolean esDLC
+}
+
+class FormularioAltaJuego {
+    String nombre
+    List<Campo> campos
+}
+
+class Campo {
+    String descripcion
+    boolean esObligatorio
+}
+
+class Atributo {
+    Campo campo
+    String detalle
+}
+
+class Compra {
+    Producto producto
+    MedioPago medioDePago
+    Cuenta comprador
+    LocalDateTime fechaHora
+}
+
+enum MedioPago {
+    DEBITO
+    CREDITO
+}
+
+class Prestamo {
+    Producto producto
+    LocalDate fechaFin
+    Cuenta prestamista
+    Cuenta adquirente
+}
+
+class DetectorFraude {
+    detectar(AlgoritmoFraude, Cuenta): boolean
+}
+
+class Cuenta {
+    String usuario
+}
+
+interface AlgoritmoFraude {
+    detectar(Cuenta): boolean
+}
+
+class LimiteUsuario implements AlgoritmoFraude {
+    static Int LIMITE_PRESTAMOS
+    detectar(Cuenta): boolean
+}
+
+class LimiteAnual implements AlgoritmoFraude {
+    static Int LIMITE_PRESTAMOS
+    detectar(Cuenta): boolean
+}
+
+class LimiteTiempo implements AlgoritmoFraude{
+    detectar(Cuenta): boolean
+}
+
+class MitigadorFraude {
+    List<Accion> acciones
+    mitigarFraude(Cuenta): void
+}
+
+interface Accion {
+    ejecutar(Cuenta): void
+}
+
+Requerimientos <- Juego
+Juego --> Genero
+Juego --> Atributo
+Genero --> Caracteristica
+Juego <- Producto
+Atributo --> Campo
+Campo <- FormularioAltaJuego
+Compra --> Producto
+Compra -> MedioPago
+Producto <- Prestamo
+Compra --> Cuenta
+Cuenta <-- Prestamo
+Cuenta <-- Prestamo
+DetectorFraude ..> AlgoritmoFraude
+MitigadorFraude --> Accion
+MitigadorFraude ..> Cuenta
+Cuenta <.. DetectorFraude
+
+@enduml
